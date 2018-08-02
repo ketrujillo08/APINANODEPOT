@@ -31,9 +31,9 @@ app.use('/contacto', CONTACT_ROUTES);
 app.use('/users', USER_ROUTES);
 app.use('/', APP_ROUTES);
 
-var httpsServer = https.createServer(credentials, app);
+//var httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(process.env.PORT, (err) => {
+app.listen(process.env.PORT, (err) => {
     if (err) {
         console.log(err);
     }
