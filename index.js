@@ -6,10 +6,9 @@ const fs = require('fs');
 const https = require('https');
 const app = express();
 
-//ROutes
-const APP_ROUTES = require('./routes/app');
-const CONTACT_ROUTES = require('./routes/contact');
-const USER_ROUTES = require('./routes/users');
+//Routes
+const INDEX_ROUTES = require('./routes/index');
+
 
 var privateKey = fs.readFileSync('./uploads/ssl/bed91_e2fa7_6f137a825b9bd088ab84326d121668ce.key', 'utf8');
 var certificate = fs.readFileSync('./uploads/ssl/api_nanodepot_com_bed91_e2fa7_1562170680_934172786e59131e53768f65f9592a63.crt', 'utf8');
@@ -27,9 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-app.use('/contacto', CONTACT_ROUTES);
-app.use('/users', USER_ROUTES);
-app.use('/', APP_ROUTES);
+app.use(INDEX_ROUTES);
+
 
 //var httpsServer = https.createServer(credentials, app);
 

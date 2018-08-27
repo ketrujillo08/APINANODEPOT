@@ -2,7 +2,13 @@ const Oportunidad = {
     data: {
         attributes: {
             name: "",
-            amount: "0"
+            amount: "0",
+            custom: {
+                horario: "",
+                anuncio: "",
+                lead_source: ""
+
+            }
         },
         relationships: {
             company: {
@@ -21,6 +27,12 @@ const Oportunidad = {
                 data: {
                     type: "opportunity_stage",
                     id: 46443
+                }
+            },
+            user: {
+                data: {
+                    type: "user",
+                    id: 0
                 }
             }
         }

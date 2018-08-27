@@ -4,7 +4,13 @@ const Contacto = {
             first_name: "",
             last_name: "",
             email: "",
-            phone: ""
+            phone: "",
+            custom: {
+                anuncio: "",
+                telefono: "",
+                leadsource: "",
+                empresa_negocio: ""
+            }
 
         },
         relationships: {

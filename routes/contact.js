@@ -14,8 +14,7 @@ const app = express();
 app.post('/', [getToken, sorteo], async(req, res) => {
     let body = req.body;
 
-    //console.log("user", contacto.data.relationships.user.data.id);
-    let contactoInit = await crearContacto(req.headers, body)
+    let contactoInit = await crearContacto(req.headers, body, req.roundrobin)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
@@ -23,7 +22,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
                 error
             });
         });
-    let oportunidadInit = await crearOportunidad(req.headers, body.nombre)
+    let oportunidadInit = await crearOportunidad(req.headers, body.nombre, req.roundrobin)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
@@ -106,12 +105,16 @@ function crearHeader(token) {
     return headers;
 }
 
-function crearOportunidad(headers, nameOportunidad) {
+function crearOportunidad(headers, nameOportunidad, userid) {
     return new Promise((resolve, reject) => {
 
         let url = process.env.URL + 'opportunities';
         let oportunidad = Oportunidad.Oportunidad;
         oportunidad.data.attributes.name = nameOportunidad;
+        oportunidad.data.attributes.custom.horario = body.horario;
+        oportunidad.data.attributes.custom.anuncio = body.anuncio;
+        oportunidad.data.attributes.custom.lead_source = body.leadsource;
+        oportunidad.data.relationships.user.data.id = userid;
         request({
             method: 'POST',
             url: url,
@@ -131,7 +134,8 @@ function crearOportunidad(headers, nameOportunidad) {
     });
 }
 
-function crearContacto(headers, body) {
+function crearContacto(headers, body, userid) {
+
 
     return new Promise((resolve, reject) => {
 
@@ -143,6 +147,12 @@ function crearContacto(headers, body) {
         contacto.data.attributes.email = body.email;
         contacto.data.attributes.phone = body.phone;
         contacto.data.relationships.company.data.id = "1365534";
+        contacto.data.relationships.user.data.id = userid;
+        contacto.data.attributes.custom.anuncio = body.anuncio;
+        contacto.data.attributes.custom.telefono = body.phone;
+        contacto.data.attributes.custom.leadsource = body.leadsource;
+        contacto.data.attributes.custom.empresa_negocio = body.empresa;
+
 
         request({
             method: 'POST',
