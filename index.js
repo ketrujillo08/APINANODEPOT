@@ -17,7 +17,7 @@ var credentials = { key: privateKey, cert: certificate };
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Headers', 'Origin, token, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'PUT,PUSH,GET,POST,DELETE,OPTIONS');
     next();
 });
