@@ -16,7 +16,7 @@ var certificate = fs.readFileSync('./uploads/ssl/api_nanodepot_com_bed91_e2fa7_1
 var credentials = { key: privateKey, cert: certificate };
 
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', '*,http://localhost:4205');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type,Accept');
     res.header('Access-Control-Allow-Methods', 'PUT,PUSH,GET,POST,DELETE,OPTIONS');
     next();
