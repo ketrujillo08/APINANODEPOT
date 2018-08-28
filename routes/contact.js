@@ -13,16 +13,16 @@ const app = express();
 
 app.post('/', [getToken, sorteo], async(req, res) => {
     let body = req.body;
-
-    let contactoInit = await crearContacto(req.headers, body, req.roundrobin)
+    let header = req.headers;
+    let contactoInit = await crearContacto(header, body, req.roundrobin)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
-                mensaje: "No se creo la oportunidad",
+                mensaje: "No se creo el contacto",
                 error
             });
         });
-    let oportunidadInit = await crearOportunidad(req.headers, body.nombre, req.roundrobin)
+    let oportunidadInit = await crearOportunidad(header, body, req.roundrobin)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
@@ -33,6 +33,14 @@ app.post('/', [getToken, sorteo], async(req, res) => {
 
     oportunidadInit = JSON.parse(oportunidadInit);
     contactoInit = JSON.parse(contactoInit);
+
+    if (contactoInit.errors) {
+        return res.status(500).json({
+            exito: false,
+            mensaje: "El contacto ya existe"
+        });
+    }
+
     let relacion = {
         data: {
             "relationships": {
@@ -48,7 +56,6 @@ app.post('/', [getToken, sorteo], async(req, res) => {
 
     let url = process.env.url + 'opportunities/' + oportunidadInit.data.id + '/contacts';
 
-    console.log(url);
     request({
         method: 'POST',
         url: url,
@@ -105,12 +112,11 @@ function crearHeader(token) {
     return headers;
 }
 
-function crearOportunidad(headers, nameOportunidad, userid) {
+function crearOportunidad(headers, body, userid) {
     return new Promise((resolve, reject) => {
-
         let url = process.env.URL + 'opportunities';
         let oportunidad = Oportunidad.Oportunidad;
-        oportunidad.data.attributes.name = nameOportunidad;
+        oportunidad.data.attributes.name = body.nombre;
         oportunidad.data.attributes.custom.horario = body.horario;
         oportunidad.data.attributes.custom.anuncio = body.anuncio;
         oportunidad.data.attributes.custom.lead_source = body.leadsource;
@@ -122,9 +128,10 @@ function crearOportunidad(headers, nameOportunidad, userid) {
             body: JSON.stringify(oportunidad)
         }, (error, response, body) => {
             if (error) {
+                //console.log("Response Error Oportunidad", body);
                 reject(body);
             } else {
-                console.log("Response Oportunidad", body);
+                //console.log("Response Oportunidad", body);
                 resolve(body);
             }
 
@@ -163,7 +170,7 @@ function crearContacto(headers, body, userid) {
             if (error) {
                 reject(body);
             } else {
-                console.log("Response Contacto", body);
+                //console.log("Response Contacto", body);
                 resolve(body);
             }
 

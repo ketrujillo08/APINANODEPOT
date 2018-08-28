@@ -4,7 +4,7 @@ const Oportunidad = {
             name: "",
             amount: "0",
             custom: {
-                horario: "",
+                horario: "Landing",
                 anuncio: "",
                 lead_source: ""
 
