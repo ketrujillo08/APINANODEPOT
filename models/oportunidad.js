@@ -3,6 +3,7 @@ const Oportunidad = {
         attributes: {
             name: "",
             amount: "0",
+            description: "",
             custom: {
                 horario: "Landing",
                 anuncio: "",

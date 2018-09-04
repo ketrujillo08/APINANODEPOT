@@ -35,9 +35,12 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     contactoInit = JSON.parse(contactoInit);
 
     if (contactoInit.errors) {
+
+
         return res.status(500).json({
             exito: false,
-            mensaje: "El contacto ya existe"
+            mensaje: "El contacto ya existe",
+            error: contactoInit.errors
         });
     }
 
