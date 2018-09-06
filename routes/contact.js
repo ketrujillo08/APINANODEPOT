@@ -37,7 +37,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     if (contactoInit.errors) {
 
 
-        return res.status(500).json({
+        return res.json({
             exito: false,
             mensaje: "El contacto ya existe",
             error: contactoInit.errors
@@ -45,7 +45,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     }
 
     let relacion = {
-        data: {
+        "data": {
             "relationships": {
                 "contacts": {
                     "data": [{
@@ -69,13 +69,15 @@ app.post('/', [getToken, sorteo], async(req, res) => {
         if (error) {
             return res.status(500).json({
                 exito: false,
-                mensaje: "Error interno",
+                mensaje: "Error a ligar",
+                error
             });
         }
 
         res.json({
             exito: true,
-            mensaje: "Oportunidad Ligada"
+            mensaje: "Oportunidad Ligada",
+            body
         });
 
     });
@@ -162,7 +164,7 @@ function crearContacto(headers, body, userid) {
         contacto.data.attributes.custom.telefono = body.phone;
         contacto.data.attributes.custom.leadsource = body.leadsource;
         contacto.data.attributes.custom.empresa_negocio = body.empresa;
-
+        console.log("Contacto", contacto);
 
         request({
             method: 'POST',

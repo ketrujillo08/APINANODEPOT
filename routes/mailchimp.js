@@ -12,16 +12,16 @@ app.post('/list/:id/members', (req, res) => {
     let headers = setHeaders();
     let mailchimp = Mailchimp;
     mailchimp.email_address = body.email;
-    mailchimp.status = body.status;
+    mailchimp.status = 'subscribed';
     mailchimp.merge_fields.FNAME = body.nombre;
     mailchimp.merge_fields.LNAME = body.apellido;
     mailchimp.merge_fields.PHONE = body.phone;
-    mailchimp.merge_fields.LEADSOURCE = body.origen;
+    mailchimp.merge_fields.LEADSOURCE = body.leadsource;
     mailchimp.merge_fields.ANUNCIO = body.anuncio;
     mailchimp.merge_fields.COUNTRY = body.country;
     mailchimp.merge_fields.COMPANIA = body.empresa;
     mailchimp.merge_fields.HORARIO = body.horario;
-
+    //console.log(mailchimp.merge_fields);
     request({
         url,
         method: 'POST',
