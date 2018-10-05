@@ -59,7 +59,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
         }
     };
 
-    let url = process.env.url + 'opportunities/' + oportunidadInit.data.id + '/contacts';
+    let url = process.env.URL + 'opportunities/' + oportunidadInit.data.id + '/contacts';
     console.log(url);
     request({
         method: 'POST',
