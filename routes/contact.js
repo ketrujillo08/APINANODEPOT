@@ -72,7 +72,8 @@ app.post('/', [getToken, sorteo], async(req, res) => {
             return res.status(500).json({
                 exito: false,
                 mensaje: "Error a ligar",
-                error
+                error: body,
+                response: response
             });
         }
 
