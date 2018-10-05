@@ -28,6 +28,13 @@ app.get('/', [getToken], (req, res) => {
     });
 });
 
+app.get('/:id', [getToken], (req, res) => {
+    let id = req.params.id;
+    let token = req.token;
+    let url = process.env.URL + '';
+
+});
+
 function crearHeader(token) {
     let bearer = "bearer " + token;
     let headers = {

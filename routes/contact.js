@@ -34,6 +34,8 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     oportunidadInit = JSON.parse(oportunidadInit);
     contactoInit = JSON.parse(contactoInit);
 
+    console.log(oportunidadInit);
+
     if (contactoInit.errors) {
 
 
@@ -58,7 +60,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     };
 
     let url = process.env.url + 'opportunities/' + oportunidadInit.data.id + '/contacts';
-
+    console.log(url);
     request({
         method: 'POST',
         url: url,
@@ -134,7 +136,7 @@ function crearOportunidad(headers, body, userid) {
         }, (error, response, body) => {
             if (error) {
                 //console.log("Response Error Oportunidad", body);
-                reject(body);
+                resolve(body);
             } else {
                 //console.log("Response Oportunidad", body);
                 resolve(body);
@@ -173,7 +175,7 @@ function crearContacto(headers, body, userid) {
             body: JSON.stringify(contacto)
         }, (error, response, body) => {
             if (error) {
-                reject(body);
+                resolve(body);
             } else {
                 //console.log("Response Contacto", body);
                 resolve(body);
