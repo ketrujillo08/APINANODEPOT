@@ -15,7 +15,7 @@ const Oportunidad = {
             company: {
                 data: {
                     type: "company",
-                    id: 1365534
+                    id: 0
                 }
             },
             pipeline: {

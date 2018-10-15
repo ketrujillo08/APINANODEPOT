@@ -8,13 +8,24 @@ const request = require('request');
 
 const Contacto = require('../models/contacto');
 const Oportunidad = require('../models/oportunidad');
+const Company = require('../models/company');
 
 const app = express();
 
 app.post('/', [getToken, sorteo], async(req, res) => {
     let body = req.body;
     let header = req.headers;
-    let contactoInit = await crearContacto(header, body, req.roundrobin)
+
+    let companyInit = await crearCompany(header, body, req.roundrobin)
+        .catch((error) => {
+            return res.status(500).json({
+                exito: false,
+                mensaje: "No se creo la compañia",
+                error
+            });
+        });
+    companyInit = JSON.parse(companyInit);
+    let contactoInit = await crearContacto(header, body, req.roundrobin, companyInit.data.id)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
@@ -22,7 +33,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
                 error
             });
         });
-    let oportunidadInit = await crearOportunidad(header, body, req.roundrobin)
+    let oportunidadInit = await crearOportunidad(header, body, req.roundrobin, companyInit.data.id)
         .catch((error) => {
             return res.status(500).json({
                 exito: false,
@@ -34,7 +45,7 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     oportunidadInit = JSON.parse(oportunidadInit);
     contactoInit = JSON.parse(contactoInit);
 
-    console.log(oportunidadInit);
+    //console.log(oportunidadInit);
 
     if (contactoInit.errors) {
 
@@ -122,15 +133,16 @@ function crearHeader(token) {
     return headers;
 }
 
-function crearOportunidad(headers, body, userid) {
+function crearOportunidad(headers, body, userid, companyId) {
     return new Promise((resolve, reject) => {
         let url = process.env.URL + 'opportunities';
         let oportunidad = Oportunidad.Oportunidad;
-        oportunidad.data.attributes.name = body.nombre;
+        oportunidad.data.attributes.name = body.nombre + " " + body.apellido;
         oportunidad.data.attributes.custom.horario = body.horario;
         oportunidad.data.attributes.custom.anuncio = body.anuncio;
         oportunidad.data.attributes.custom.lead_source = body.leadsource;
         oportunidad.data.relationships.user.data.id = userid;
+        oportunidad.data.relationships.company.data.id = companyId;
         request({
             method: 'POST',
             url: url,
@@ -151,7 +163,7 @@ function crearOportunidad(headers, body, userid) {
     });
 }
 
-function crearContacto(headers, body, userid) {
+function crearContacto(headers, body, userid, companyId) {
 
 
     return new Promise((resolve, reject) => {
@@ -163,7 +175,7 @@ function crearContacto(headers, body, userid) {
         contacto.data.attributes.last_name = body.apellido;
         contacto.data.attributes.email = body.email;
         contacto.data.attributes.phone = body.phone;
-        contacto.data.relationships.company.data.id = "1365534";
+        contacto.data.relationships.company.data.id = companyId;
         contacto.data.relationships.user.data.id = userid;
         contacto.data.attributes.custom.anuncio = body.anuncio;
         contacto.data.attributes.custom.telefono = body.phone;
@@ -186,6 +198,35 @@ function crearContacto(headers, body, userid) {
 
         });
 
+
+    });
+}
+
+function crearCompany(headers, body, userid) {
+    return new Promise((resolve, reject) => {
+        let url = process.env.URL + 'companies';
+        let company = Company.Company;
+        console.log("Compañia", company);
+        company.data.attributes.name = body.nombre + ' ' + body.apellido;
+        company.data.relationships.user.data.id = userid;
+
+        request({
+            method: 'POST',
+            url: url,
+            headers: headers,
+            body: JSON.stringify(company)
+        }, (error, response, body) => {
+            console.log("Error", error);
+            console.log("Response", error);
+            console.log("Body", error);
+            if (error) {
+                resolve(response);
+            } else {
+                //console.log("Response Contacto", body);
+                resolve(body);
+            }
+
+        });
 
     });
 }
