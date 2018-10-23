@@ -2,11 +2,15 @@ const express = require("express");
 const app = express();
 
 app.post("/", (req, res) => {
-    let body = req.body;
+    let nombre = req.query.nombre;
+    let email = req.query.email;
 
     res.json({
         success: true,
-        body
+        body: {
+            nombre,
+            email
+        }
     });
 
 });
