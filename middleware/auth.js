@@ -16,6 +16,18 @@ getToken = (req, res, next) => {
 
 
 }
+
+getZapierToken = (req, res, next) => {
+    let zapToken = req.body.zapToken;
+    if (zapToken != process.env.ZAPIER) {
+        return res.status(500).json({
+            exito: false,
+            mensaje: "Token no válido"
+        });
+    } else {
+        next();
+    }
+}
 refreshToken = (req, res, next) => {
     //console.log("Verificando token en middleware");
     let token = req.get('token');
@@ -40,5 +52,6 @@ refreshToken = (req, res, next) => {
 }
 module.exports = {
     getToken,
-    refreshToken
+    refreshToken,
+    getZapierToken
 }
