@@ -18,7 +18,7 @@ getToken = (req, res, next) => {
 }
 
 getZapierToken = (req, res, next) => {
-    let zapToken = JSON.stringify(req.body);
+    let zapToken = req.query.zapToken;
     if (zapToken != process.env.ZAPIER) {
         return res.status(500).json({
             exito: false,
