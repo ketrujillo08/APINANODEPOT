@@ -22,7 +22,7 @@ getZapierToken = (req, res, next) => {
     if (zapToken != process.env.ZAPIER) {
         return res.status(500).json({
             exito: false,
-            zapToken,
+            zapToken: req,
             mensaje: "Token no válido"
         });
     } else {
