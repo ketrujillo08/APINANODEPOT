@@ -24,7 +24,10 @@ app.post('/', [getToken, sorteo], async(req, res) => {
                 error
             });
         });
+
+    console.log("Company", companyInit);
     companyInit = JSON.parse(companyInit);
+
     let contactoInit = await crearContacto(header, body, req.roundrobin, companyInit.data.id)
         .catch((error) => {
             return res.status(500).json({
@@ -45,7 +48,8 @@ app.post('/', [getToken, sorteo], async(req, res) => {
     oportunidadInit = JSON.parse(oportunidadInit);
     contactoInit = JSON.parse(contactoInit);
 
-    //console.log(oportunidadInit);
+    console.log('Oportunidad', oportunidadInit);
+    console.log('Contacto', contactoInit);
 
     if (contactoInit.errors) {
 
@@ -206,7 +210,7 @@ function crearCompany(headers, body, userid) {
     return new Promise((resolve, reject) => {
         let url = process.env.URL + 'companies';
         let company = Company.Company;
-        console.log("Compañia", company);
+        //console.log("Compañia", company);
         company.data.attributes.name = body.nombre + ' ' + body.apellido;
         company.data.relationships.user.data.id = userid;
 
@@ -216,11 +220,11 @@ function crearCompany(headers, body, userid) {
             headers: headers,
             body: JSON.stringify(company)
         }, (error, response, body) => {
-            console.log("Error", error);
-            console.log("Response", error);
-            console.log("Body", error);
-            if (error) {
-                resolve(response);
+            //console.log("Error", error);
+            //console.log("Response", error);
+            //console.log("Body", error);
+            if (body) {
+                resolve(body);
             } else {
                 //console.log("Response Contacto", body);
                 resolve(body);
